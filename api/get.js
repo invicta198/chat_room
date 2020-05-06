@@ -6,8 +6,15 @@ const app=express();
 const router = express.Router();
 
 router.get('/', (request, response) => {
-  console.log("yes");
-  response.sendFile(path.join(__dirname,'../public','page.html'));
+  response.sendFile(path.join(__dirname,'../public','login.html'));
+});
+
+router.get('/login', (request, response) => {
+  response.sendFile(path.join(__dirname,'../public','login.html'));
+});
+
+router.get('/register', (request, response) => {
+  response.sendFile(path.join(__dirname,'../public','register.html'));
 });
 
 router.get('/message', (request, response) =>{

@@ -23,6 +23,8 @@ const server = app.listen(3000, () => {
 });
 
 app.get('/',getRoute);
+app.get('/register',getRoute);
+app.get('/login',getRoute);
 app.post('/',postRoute);
 
 var options = {
