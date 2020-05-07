@@ -9,4 +9,8 @@ router.get('/', (request, response) => {
   response.sendFile(path.join(__dirname,'../public','login.html'));
 });
 
+router.get('/message', (request, response) =>{
+  response.sendFile(path.join(__dirname,'../public','chat.html'));
+});
+
 module.exports = router;

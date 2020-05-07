@@ -4,6 +4,8 @@ const parser = require('body-parser');
 const mongodb = require('mongodb');
 
 const getRoute=require('./api/get.js');
+const loginRoute=require('./api/loginUser.js');
+const registerRoute=require('./api/registerUser.js');
 const postRoute=require('./api/post.js');
 
 const app = express();
@@ -23,8 +25,9 @@ const server = app.listen(3000, () => {
 });
 
 app.get('/',getRoute);
-app.get('/register',getRoute);
-app.get('/login',getRoute);
+app.use('/register',registerRoute);
+app.use('/login',loginRoute);
+
 app.post('/',postRoute);
 
 var options = {
