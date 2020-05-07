@@ -20,8 +20,15 @@ const message = mongoose.model(
 app.use(parser.json());
 app.use(parser.urlencoded({extended:true}));
 
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 const server = app.listen(3000, () => {
   console.log("server @", server.address().port);
+});
+
+io.on('connection', ()=>{
+  console.log('user connect');
 });
 
 app.get('/',getRoute);
@@ -34,6 +41,7 @@ var options = {
   useNewUrlParser:true,
   useUnifiedTopology:true
 }
+
 mongoose.connect(dburl, options, function(error) {
   if(error)
     console.log(error);

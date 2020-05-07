@@ -6,7 +6,7 @@ const app=express();
 const router = express.Router();
 
 router.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname,'../public','login.html'));
+  response.sendFile(path.join(__dirname,'../public','intro.html'));
 });
 
 module.exports = router;
