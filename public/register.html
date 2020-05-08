@@ -11,11 +11,49 @@
     <div class="container"><br>
       <div class="jumbotron">
         <h1 class="display-4">Sign Up Form</h1><br>
-        <input id="email" class="form-control" placeholder="Email"><br>
-        <input id="password" class="form-control" placeholder="Password"><br><br>
-        <button id="send" class="btn btn-success">Sign Up</button>
+        <form onsubmit="return false">
+          <input id="email" class="form-control" placeholder="Email" required="true"><br>
+          <input id="password" class="form-control" placeholder="Password" required="true"><br><br>
+          <button id="send" class="btn btn-success" onclick="sendData()">Sign Up</button>
+        </form>
         <div>Have an account?<a href="login">Login</a></div>
       </div>
     </div>
   </body>
+  <script>
+
+    function sendData() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      if (email=="" || password=="")  alert("fill all enteries");
+      else{
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "http://localhost:3000/register",
+          "method": "POST",
+          "headers": {
+            "content-type": "application/x-www-form-urlencoded",
+            "cache-control": "no-cache",
+          },
+          "data": {
+            "email": ""+email,
+            "password": ""+password
+          },
+          success: function(results, textStatus) {
+            if(textStatus=="success") document.location.replace("http://localhost:3000/message");
+            else  alert(textStatus);
+          },
+          error: function(xhr, status, error) {
+              console.log("xhr : " + xhr);
+              console.log("status : " + status);
+              console.log("error : " + error);
+          }
+        };
+
+        $.ajax(settings).done(function (response) {
+        });
+      }
+    }
+  </script>
 </html>

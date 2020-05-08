@@ -6,12 +6,8 @@ const app=express();
 const router = express.Router();
 
 router.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname,'../public','register.html'));
-});
-
-router.post('/', (request, response) => {
-  console.log("request : ",request.body);
-  response.send(true);
+  console.log("chat.js : ",request.body);
+  response.sendFile(path.join(__dirname,'../public','chat.html'));
 });
 
 module.exports = router;

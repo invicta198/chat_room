@@ -6,7 +6,7 @@ const mongodb = require('mongodb');
 const getRoute=require('./api/get.js');
 const loginRoute=require('./api/loginUser.js');
 const registerRoute=require('./api/registerUser.js');
-const postRoute=require('./api/post.js');
+const messageRoute=require('./api/chat.js');
 
 const app = express();
 const dburl = 'mongodb://localhost:27017';
@@ -23,19 +23,22 @@ app.use(parser.urlencoded({extended:true}));
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-const server = app.listen(3000, () => {
-  console.log("server @", server.address().port);
+const serverHTTP = http.listen(3000, () => {
+  console.log('http @ 3000');
 });
 
 io.on('connection', ()=>{
-  console.log('user connect');
+  console.log('server connect');
 });
 
-app.get('/',getRoute);
+io.on('disconnect', (socket)=>{
+  console.log('server disconnect');
+});
+
+app.use('/',getRoute);
+app.use('/message',messageRoute);
 app.use('/register',registerRoute);
 app.use('/login',loginRoute);
-
-app.post('/',postRoute);
 
 var options = {
   useNewUrlParser:true,
