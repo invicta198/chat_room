@@ -10,7 +10,6 @@ router.get('/', (request, response) => {
 });
 
 router.post('/', (request, response) =>{
-  console.log("request : ",request.body);
   response.send(true);
 });
 
