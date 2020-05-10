@@ -21,8 +21,11 @@ const serverHTTP = http.listen(3000, () => {
   console.log('http @ 3000');
 });
 
+var onlineSockets = {};
+
 io.on('connection', (socket)=>{
   console.log('server connect');
+  //io.emit('online socket', socket.id);
 
   socket.on('message', (data) =>{
     console.log("message in socket : ",data);
@@ -31,6 +34,14 @@ io.on('connection', (socket)=>{
 
   socket.on('username', (data) =>{
     socket.username = data;
+    onlineSockets[""+socket.id] = data;
+    io.emit('online socket', onlineSockets);
+  });
+
+  socket.on('disconnect', ()=>{
+    delete onlineSockets[""+socket.id];
+    console.log("disconnect : ",socket.id);
+    io.emit('online socket', onlineSockets);
   });
 
 });
