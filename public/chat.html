@@ -62,7 +62,7 @@
         };
       });
 
-      socket.on('message', function(onlineSockets){
+      socket.on('message', function(msg){
           //console.log(msg);
           $('#messages').append($('<li>').html(msg));
       });
