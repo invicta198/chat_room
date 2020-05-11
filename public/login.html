@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <title>Login Page</title>
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -20,11 +21,11 @@
       </div>
     </div>
   </body>
-  <script>
+  <script type="text/javascript">
     function sendData() {
       var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
-      if (email=="" || password=="")  alert("fill all enteries");
+      if (email=="" || password=="")  alert("fill all credentials");
       else{
         var settings = {
           "async": true,
@@ -39,9 +40,16 @@
             "email": ""+email,
             "password": ""+password
           },
-          success: function(results, textStatus) {
-            if(textStatus=="success") document.location.replace("http://localhost:3000/message");
-            else alert(textStatus)
+          success: function(results, statusCode, textStatus) {
+            alert(results["statusCode"]+" : "+results["statusText"]);
+            if(results["statusCode"] == "200"){
+              document.location.replace("http://localhost:3000/message");
+            }
+            //console.log("results : ",results);
+            //console.log("statusCode : ",statusCode);
+            //console.log("textStatus : ",textStatus);
+            //if(textStatus=="success") document.location.replace("http://localhost:3000/message");
+            //else alert(textStatus)
           },
           error: function(xhr, status, error) {
               console.log("xhr : " + xhr);
@@ -49,7 +57,6 @@
               console.log("error : " + error);
           }
         };
-
         $.ajax(settings).done(function (response) {
         });
       }

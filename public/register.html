@@ -40,9 +40,16 @@
             "email": ""+email,
             "password": ""+password
           },
-          success: function(results, textStatus) {
-            if(textStatus=="success") document.location.replace("http://localhost:3000/message");
-            else  alert(textStatus);
+          success: function(results, statusCode, textStatus) {
+            alert(results["statusCode"]+" : "+results["statusText"]);
+            if(results["statusCode"] == "201"){
+              document.location.replace("http://localhost:3000/message");
+            }
+            //console.log("results : ",results);
+            //console.log("statusCode : ",statusCode);
+            //console.log("textStatus : ",textStatus);
+            //if(textStatus=="success") document.location.replace("http://localhost:3000/message");
+            //else alert(textStatus)
           },
           error: function(xhr, status, error) {
               console.log("xhr : " + xhr);

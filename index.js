@@ -1,7 +1,6 @@
 const express = require('express');
 const parser = require('body-parser');
 const mongoose = require('mongoose');
-//const mongodb = require('mongodb');
 
 const getRoute=require('./api/get.js');
 const loginRoute=require('./api/loginUser.js');
@@ -9,7 +8,6 @@ const registerRoute=require('./api/registerUser.js');
 const messageRoute=require('./api/chat.js');
 
 const app = express();
-//const dburl = 'mongodb://localhost:27017';
 
 app.use(parser.json());
 app.use(parser.urlencoded({extended:true}));
@@ -25,7 +23,6 @@ var onlineSockets = {};
 
 io.on('connection', (socket)=>{
   console.log('server connect');
-  //io.emit('online socket', socket.id);
 
   socket.on('message', (data) =>{
     console.log("message in socket : ",data);
