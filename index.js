@@ -1,6 +1,5 @@
 const express = require('express');
 const parser = require('body-parser');
-//const mongoose = require('mongoose');
 
 const getRoute=require('./api/get.js');
 const loginRoute=require('./api/loginUser.js');
@@ -16,31 +15,30 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 const serverHTTP = http.listen(3000, () => {
-  console.log('http @ 3000');
+    console.log('http @ 3000');
 });
 
 
 var onlineSockets = {};
 
 io.on('connection', (socket)=>{
-  console.log('server connect');
+    console.log('server connect');
 
-  socket.on('message', (data) =>{
-    console.log("message in socket : ",data);
-    io.emit('message', '<strong>' + socket.username + '</strong>: ' + data);
-  });
+    socket.on('message', (data) =>{
+        io.emit('message', '<strong>' + socket.username + '</strong>: ' + data);
+    });
 
-  socket.on('username', (data) =>{
-    socket.username = data;
-    onlineSockets[""+socket.id] = data;
-    io.emit('online socket', onlineSockets);
-  });
+    socket.on('username', (data) =>{
+        socket.username = data;
+        onlineSockets[""+socket.id] = data;
+        io.emit('online socket', onlineSockets);
+    });
 
-  socket.on('disconnect', ()=>{
-    delete onlineSockets[""+socket.id];
-    console.log("disconnect : ",socket.id);
-    io.emit('online socket', onlineSockets);
-  });
+    socket.on('disconnect', ()=>{
+        delete onlineSockets[""+socket.id];
+        console.log("disconnect : ",socket.id);
+        io.emit('online socket', onlineSockets);
+    });
 
 });
 

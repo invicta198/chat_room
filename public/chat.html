@@ -1,95 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-    <title>Chat Room</title>
+		<title>Chat Room</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    	<script src="/socket.io/socket.io.js"></script>
 	</head>
 	<style>
-      #chatForm{
-          padding:5px;
-          position:fixed;
-          bottom: 0;
-          margin-right: 2%;
-          margin-left: 2%;
-          width:96%;
-      }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-  </style>
+		#chatForm{
+			padding:5px;
+			position:fixed;
+			bottom: 0;
+			margin-right: 2%;
+			margin-left: 2%;
+			width:96%;
+		}
+		#messages li { padding: 5px 10px; }
+		#messages li:nth-child(odd) { background: #eee; }
+	</style>
 	<body>
 		<div class="container-fluid">
-      <div id="parent" class="row"></div>
+			<div id="parent" class="row"></div>
 			<button type="submit" id="logout" onclick="logout()" class="btn btn-outline-warning">Logout</button>
-      <br><br>
-      <div id="row" class="row border" data-spy="scroll">
+			<br><br>
+			<div id="row" class="row border" data-spy="scroll">
 				<div id="leftcol" class="col-4">
-				    <h4>Online Sockets:</h4>
-            <ul id="sockets"></ul>
+					<h4>Online Sockets:</h4>
+					<ul id="sockets"></ul>
 				</div>
 				<div id="rightcol" class="col-8 border">
 					<h4>Messages:</h4>
-          <ul id="messages"></ul>
+					<ul id="messages"></ul>
 				</div>
 			</div>
-      <div class="row">
-        <form id="chatForm" class="input-group-append border border-dark" onsubmit="return false">
-          <input id="textMessage" class="form-control" placeholder="Type your message here..."/>
-          <button id="sendButton" onclick="sendMessage()" class="btn btn-outline-success">Send</button>
-        </form>
-      </div>
+			<div class="row">
+				<form id="chatForm" class="input-group-append border border-dark" onsubmit="return false">
+					<input id="textMessage" class="form-control" placeholder="Type your message here..."/>
+					<button id="sendButton" onclick="sendMessage()" class="btn btn-outline-success">Send</button>
+				</form>
+			</div>
 		</div>
 	</body>
-  <script>
-      //var socket = io("http://localhost:3000/message");
-      var socket = io();
+	<script>
+		var socket = io();
 
-      var username = prompt('Please tell me your name');
+		var username = prompt('Please tell me your name');
 
-      var parent = document.getElementById('parent');
-      var h2Element = document.createElement('h2');
-      h2Element.innerText = username+", your Chat Room";
-      parent.appendChild(h2Element);
+		var parent = document.getElementById('parent');
+      	var h2Element = document.createElement('h2');
+      	h2Element.innerText = username+", your Chat Room";
+      	parent.appendChild(h2Element);
 
-      socket.emit('username', username);
+      	socket.emit('username', username);
 
-      socket.on('online socket', function(onlineSockets){
-        $('#sockets').empty();
-        for(var key in onlineSockets){
-          $('#sockets').append($('<li>').html(onlineSockets[key]));
-        };
-      });
+      	socket.on('online socket', function(onlineSockets){
+        	$('#sockets').empty();
+    		for(var key in onlineSockets){
+      			$('#sockets').append($('<li>').html(onlineSockets[key]));
+    		}
+      	});
 
-      socket.on('message', function(msg){
-          //console.log(msg);
+      	socket.on('message', function(msg){
           $('#messages').append($('<li>').html(msg));
-      });
+      	});
 
-      function sendMessage() {
-        var message = document.getElementById('textMessage').value;
-        document.getElementById('textMessage').value="";
-        socket.emit("message", message);
-      }
+      	function sendMessage() {
+        	var message = document.getElementById('textMessage').value;
+        	document.getElementById('textMessage').value="";
+        	socket.emit("message", message);
+      	}
 
-			function logout() {
-				var settings = {
-          "async": true,
-          "crossDomain": true,
-          "url": "http://localhost:3000/login/logout",
-          "method": "GET",
-					"credentials": "include",
-          "headers": {
-            "content-type": "application/x-www-form-urlencoded",
-            "cache-control": "no-cache",
-          },
-				};
-				$.ajax(settings).done(function (response) {
-					document.location.replace("http://localhost:3000/");
-					console.log(response);
-	      });
-      }
-  </script>
+		function logout() {
+			var settings = {
+          		"async": true,
+          		"crossDomain": true,
+          		"url": "http://localhost:3000/login/logout",
+          		"method": "GET",
+				"credentials": "include",
+          		"headers": {
+            		"content-type": "application/x-www-form-urlencoded",
+            		"cache-control": "no-cache",
+          		},
+			};
+			$.ajax(settings).done(function (response) {
+				document.location.replace("http://localhost:3000/");
+			});
+		}
+	</script>
 </html>

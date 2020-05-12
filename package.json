@@ -1,20 +1,20 @@
 {
-  "name": "chat_room",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "invicta198",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.5",
-    "express": "^4.17.1",
-    "http": "0.0.1-security",
-    "mongodb": "^3.5.7",
-    "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0"
-  }
+    "name": "chat_room",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "invicta198",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "cookie-parser": "^1.4.5",
+        "express": "^4.17.1",
+        "http": "0.0.1-security",
+        "mongodb": "^3.5.7",
+        "socket.io": "^2.3.0",
+        "socket.io-client": "^2.3.0"
+    }
 }
