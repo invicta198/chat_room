@@ -1,7 +1,9 @@
 const express = require('express');
 const mongodb = require('mongodb');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
+const router = express.Router();
 const dburl = 'mongodb://localhost:27017';
 const responseData = {
   "statusCode" : "0",
@@ -9,11 +11,17 @@ const responseData = {
 };
 const MongoClient=mongodb.MongoClient;
 
+router.use(cookieParser());
+
 const app=express();
-const router = express.Router();
+var cookieStored="";
 
 router.get('/', (request, response) => {
-  response.sendFile(path.join(__dirname,'../public','register.html'));
+  cookieStored=""+request.cookies['email'];
+  //console.log(cookieStored);
+  if(cookieStored==undefined || cookieStored=="")
+    response.sendFile(path.join(__dirname,'../public','register.html'));
+  else response.redirect('/message');
 });
 
 router.post('/', (request, response) =>{
@@ -49,7 +57,8 @@ router.post('/', (request, response) =>{
                 }
                 else{
                   responseData["statusCode"] = "201";
-                  responseData["statusText"] = "Register success"
+                  responseData["statusText"] = "Register success";
+                  response.cookie("email",email);
                   response.send(responseData).end();
                 }
 		    			});
@@ -72,7 +81,7 @@ router.post('/', (request, response) =>{
       responseData["statusText"] = "error in credentials"
       response.send(responseData).end();
 		}
-  }
+   }
   });
 });
 

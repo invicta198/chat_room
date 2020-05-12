@@ -23,6 +23,7 @@
 	<body>
 		<div class="container-fluid">
       <div id="parent" class="row"></div>
+			<button type="submit" id="logout" onclick="logout()" class="btn btn-outline-warning">Logout</button>
       <br><br>
       <div id="row" class="row border" data-spy="scroll">
 				<div id="leftcol" class="col-4">
@@ -71,6 +72,24 @@
         var message = document.getElementById('textMessage').value;
         document.getElementById('textMessage').value="";
         socket.emit("message", message);
+      }
+
+			function logout() {
+				var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "http://localhost:3000/login/logout",
+          "method": "GET",
+					"credentials": "include",
+          "headers": {
+            "content-type": "application/x-www-form-urlencoded",
+            "cache-control": "no-cache",
+          },
+				};
+				$.ajax(settings).done(function (response) {
+					document.location.replace("http://localhost:3000/");
+					console.log(response);
+	      });
       }
   </script>
 </html>

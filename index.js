@@ -1,6 +1,6 @@
 const express = require('express');
 const parser = require('body-parser');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 
 const getRoute=require('./api/get.js');
 const loginRoute=require('./api/loginUser.js');
@@ -18,6 +18,7 @@ const io = require('socket.io')(http);
 const serverHTTP = http.listen(3000, () => {
   console.log('http @ 3000');
 });
+
 
 var onlineSockets = {};
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const mongodb = require('mongodb');
 const path = require('path');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 
 const app=express();
 const router = express.Router();
