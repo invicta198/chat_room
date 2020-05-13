@@ -46,7 +46,8 @@
 	<script>
 		var socket = io();
 
-		var username = prompt('Please tell me your name');
+		var username = getCookie().username;
+		console.log(username);
 
 		var parent = document.getElementById('parent');
       	var h2Element = document.createElement('h2');
@@ -66,6 +67,22 @@
           $('#messages').append($('<li>').html(msg));
       	});
 
+		function getCookie() {
+			var name = "chat_room_cookie=";
+		  	var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+    			var c = ca[i];
+    			while (c.charAt(0) == ' ') {
+      				c = c.substring(1);
+    			}
+    			if (c.indexOf(name) == 0) {
+      				return JSON.parse(c.substring(name.length+2, c.length));
+    			}
+  			}
+			return "nothing";
+		}
+		
       	function sendMessage() {
         	var message = document.getElementById('textMessage').value;
         	document.getElementById('textMessage').value="";
