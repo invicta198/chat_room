@@ -19,15 +19,18 @@
 		}
 		#messages li { padding: 5px 10px; }
 		#messages li:nth-child(odd) { background: #eee; }
+		#logout{
+			float: right;
+		}
 	</style>
 	<body>
 		<div class="container-fluid">
+			<button type="submit" id="logout" onclick="logout()" class="btn btn-outline-danger">Logout</button>
 			<div id="parent" class="row"></div>
-			<button type="submit" id="logout" onclick="logout()" class="btn btn-outline-warning">Logout</button>
-			<br><br>
+			<br>
 			<div id="row" class="row border" data-spy="scroll">
 				<div id="leftcol" class="col-4">
-					<h4>Online Sockets:</h4>
+					<h4>Online Users:</h4>
 					<ul id="sockets"></ul>
 				</div>
 				<div id="rightcol" class="col-8 border">
@@ -43,63 +46,64 @@
 			</div>
 		</div>
 	</body>
-	<script>
+	<script type="text/javascript">
 		var socket = io();
 
+		//extract username from stored cookie
 		var username = getCookie().username;
-		console.log(username);
 
-		var parent = document.getElementById('parent');
-      	var h2Element = document.createElement('h2');
-      	h2Element.innerText = username+", your Chat Room";
-      	parent.appendChild(h2Element);
+		$('#parent').append($('<h2>').html(username+", your Chat Room"));
 
-      	socket.emit('username', username);
+		socket.emit('username', username);
 
-      	socket.on('online socket', function(onlineSockets){
-        	$('#sockets').empty();
-    		for(var key in onlineSockets){
-      			$('#sockets').append($('<li>').html(onlineSockets[key]));
-    		}
-      	});
+		//addition of list of available 'online' sockets
+		socket.on('online socket', function(onlineSockets){
+			$('#sockets').empty();
+			for(var key in onlineSockets){
+				$('#sockets').append($('<li>').html(onlineSockets[key]));
+			}
+		});
 
-      	socket.on('message', function(msg){
-          $('#messages').append($('<li>').html(msg));
-      	});
+		socket.on('message', function(msg){
+		  $('#messages').append($('<li>').html(msg));
+		});
 
+		//to extract the 'chat_room_cookie' and stored values
 		function getCookie() {
 			var name = "chat_room_cookie=";
-		  	var decodedCookie = decodeURIComponent(document.cookie);
+			var decodedCookie = decodeURIComponent(document.cookie);
 			var ca = decodedCookie.split(';');
 			for(var i = 0; i <ca.length; i++) {
-    			var c = ca[i];
-    			while (c.charAt(0) == ' ') {
-      				c = c.substring(1);
-    			}
-    			if (c.indexOf(name) == 0) {
-      				return JSON.parse(c.substring(name.length+2, c.length));
-    			}
-  			}
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return JSON.parse(c.substring(name.length+2, c.length));
+				}
+			}
 			return "nothing";
 		}
-		
-      	function sendMessage() {
-        	var message = document.getElementById('textMessage').value;
-        	document.getElementById('textMessage').value="";
-        	socket.emit("message", message);
-      	}
 
+		//emits 'message'
+		function sendMessage() {
+			var message = document.getElementById('textMessage').value;
+			document.getElementById('textMessage').value="";
+			socket.emit("message", message);
+		}
+
+		//sends 'get' logout request
 		function logout() {
 			var settings = {
-          		"async": true,
-          		"crossDomain": true,
-          		"url": "http://localhost:3000/login/logout",
-          		"method": "GET",
+				"async": true,
+				"crossDomain": true,
+				"url": "http://localhost:3000/login/logout",
+				"method": "GET",
 				"credentials": "include",
-          		"headers": {
-            		"content-type": "application/x-www-form-urlencoded",
-            		"cache-control": "no-cache",
-          		},
+				"headers": {
+					"content-type": "application/x-www-form-urlencoded",
+					"cache-control": "no-cache",
+				},
 			};
 			$.ajax(settings).done(function (response) {
 				document.location.replace("http://localhost:3000/");

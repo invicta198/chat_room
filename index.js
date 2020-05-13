@@ -1,6 +1,10 @@
+/*
+Main module to handle the routes and message. Entry point for the npm.
+*/
 const express = require('express');
 const parser = require('body-parser');
 
+//routes defining the path
 const getRoute=require('./api/get.js');
 const loginRoute=require('./api/loginUser.js');
 const registerRoute=require('./api/registerUser.js');
@@ -18,22 +22,26 @@ const serverHTTP = http.listen(3000, () => {
     console.log('http @ 3000');
 });
 
-
+//dictionary to store the socket.id : username
 var onlineSockets = {};
 
 io.on('connection', (socket)=>{
     console.log('server connect');
 
+    //socket listen to 'message'
     socket.on('message', (data) =>{
         io.emit('message', '<strong>' + socket.username + '</strong>: ' + data);
     });
 
+    //socket listen to 'username'
     socket.on('username', (data) =>{
         socket.username = data;
         onlineSockets[""+socket.id] = data;
+        console.log(socket.username," : ",socket.id);
         io.emit('online socket', onlineSockets);
     });
 
+    //on socket disconnect
     socket.on('disconnect', ()=>{
         delete onlineSockets[""+socket.id];
         console.log("disconnect : ",socket.id);
