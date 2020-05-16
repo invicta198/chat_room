@@ -9,6 +9,9 @@
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <style>
+    body{
+        background-color: #AAAAAA;
+    }
     </style>
     <body>
         <div class="container"><br>
@@ -33,7 +36,7 @@
             var username = document.getElementById("username").value;
             if (email=="" || password=="" || username=="")  alert("fill all enteries");
             else{
-                //object to be sent 
+                //object to be sent
                 var settings = {
                     "async": true,
                     "crossDomain": true,

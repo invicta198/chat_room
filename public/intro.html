@@ -1,23 +1,39 @@
-<!DOCTYPE html>
 <html>
   <head>
       <title>First Page</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
+    <style>
+        body{
+            background-color: #A2A2A2;
+        }
+        h1, h3 {
+            font-family: "Lato", sans-serif
+        }
+        .w3-bar,h1 {
+            font-family: "Montserrat", sans-serif
+        }
+        #button{
+            font-family: "Montserrat", sans-serif;
+            border: 2px solid;
+            border-radius: 6px;
+        }
+    </style>
     <body>
-        <div class="container"><br>
-            <div class="jumbotron">
-                <h2 class="display-4">Welcome to Messaging App</h2><br>
-                <form onsubmit="return false">
-                    <input id="email" class="form-control" placeholder="Email" required="true"><br>
-                    <input id="password" class="form-control" placeholder="Password" required="true"><br><br>
-                    <button id="send" class="btn btn-success" onclick="sendData()">Log In</button>
-                </form>
-                <div>Don't have an account?<a href="register">Register</a></div>
-            </div>
+        <header class="w3-container w3-center" style="padding:128px 16px">
+            <h1 class="w3-margin w3-jumbo">CHAT ROOM</h1>
+            <p class="w3-xlarge">Let's get started</p>
+            <button id="button" onclick="getLogin()"class="w3-button w3-black w3-padding-large w3-large w3-margin-top">Go On</button>
+        </header>
     </body>
+    <script>
+        function getLogin() {
+            document.location.replace("http://localhost:3000/login");
+        }
+    </script>
 </html>
