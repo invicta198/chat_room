@@ -9,37 +9,84 @@
     	<script src="/socket.io/socket.io.js"></script>
 	</head>
 	<style>
+		.user {
+			border: 3px solid #EAEAEA;
+			background-color: #f1f1f1;
+			border-radius: 5px;
+			padding: 10px;
+			margin: 10px 0;
+			word-wrap: break-word;
+		}
+
+		.message {
+			border: 2px solid #dedede;
+			background-color: #f1f1f1;
+			border-radius: 5px;
+			padding: 10px;
+			margin: 10px 0;
+			word-wrap: break-word;
+		}
+
+		.sent {
+			border-color: #c0c0c0;
+			background-color: #c0c0c0;
+			text-align: right;
+		}
+
+		.message::after {
+			content: "";
+			clear: both;
+			display: table;
+		}
+
+		.time-right {
+			float: right;
+			color: #000000;
+		}
+
+		.time-left {
+			float: left;
+			color: #000000;
+		}
+		#sendButton{
+			margin-left:3px;
+		}
 		#chatForm{
-			padding:5px;
+			border: 3px solid #7A7A7A;
+			border-radius: 5px;
+			padding:3px;
 			position:fixed;
 			bottom: 0;
-			margin-right: 2%;
-			margin-left: 2%;
-			width:96%;
+			margin-right: 1%;
+			margin-left: 1%;
+			width:98%;
 		}
-		#messages li { padding: 5px 10px; }
-		#messages li:nth-child(odd) { background: #eee; }
 		#logout{
+			margin-top: 5px;
 			float: right;
+		}
+		#account{
+			margin-right: 5px;
+			margin-top: 5px;
+			float: right;
+		}
+		#row-adjust{
+			margin-bottom: 50px;
 		}
 	</style>
 	<body>
 		<div class="container-fluid">
 			<button type="submit" id="logout" onclick="logout()" class="btn btn-outline-danger">Logout</button>
-			<div id="parent" class="row"></div>
-			<br>
-			<div id="row" class="row border" data-spy="scroll">
-				<div id="leftcol" class="col-4">
-					<h4>Online Users:</h4>
-					<ul id="sockets"></ul>
-				</div>
-				<div id="rightcol" class="col-8 border">
-					<h4>Messages:</h4>
-					<ul id="messages"></ul>
+			<button id="account" class="btn btn-outline-success">Account</button>
+			<div id="parent" class="row"></div><br>
+			<div id="row-adjust" class="row" data-spy="scroll">
+				<div id="leftcol" class="col-4"></div>
+				<div id="rightcol" class="col-8">
+					<h4>Chat Messages:</h4>
 				</div>
 			</div>
 			<div class="row">
-				<form id="chatForm" class="input-group-append border border-dark" onsubmit="return false">
+				<form id="chatForm" class="input-group-append" onsubmit="return false">
 					<input id="textMessage" class="form-control" placeholder="Type your message here..."/>
 					<button id="sendButton" onclick="sendMessage()" class="btn btn-outline-success">Send</button>
 				</form>
@@ -58,14 +105,55 @@
 
 		//addition of list of available 'online' sockets
 		socket.on('online socket', function(onlineSockets){
-			$('#sockets').empty();
+			document.getElementById("leftcol").innerHTML="";
+			var user_heading = document.createElement("h4");
+			user_heading.innerHTML = "Online Users:";
+			document.getElementById("leftcol").appendChild(user_heading);
+
 			for(var key in onlineSockets){
-				$('#sockets').append($('<li>').html(onlineSockets[key]));
+
+				//create div to show users
+				var user_div = document.createElement("div");
+				user_div.className = "user";
+
+				//tag p to have username
+				var user_p = document.createElement("p");
+				user_p.innerHTML = onlineSockets[key];
+
+				//appending all elements
+				document.getElementById("leftcol").appendChild(user_div);
+				user_div.appendChild(user_p);
 			}
+
 		});
 
-		socket.on('message', function(msg){
-		  $('#messages').append($('<li>').html(msg));
+		// on messge recieved
+		socket.on('message', function(new_data){
+			var sender = new_data["sender"];
+			if(sender == username)
+				return;
+			var message = new_data["data"];
+			message = "<strong>"+sender+"</strong>: "+message;
+
+			//create div to show message
+  		  	var sent_message_div = document.createElement("div");
+  		  	sent_message_div.className = "message";
+
+  		  	//tag p to have message
+  		  	var sent_message_p = document.createElement("p");
+  		  	sent_message_p.innerHTML = message;
+
+  		  	//current time
+  		  	var today = new Date();
+  		  	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  		  	var time_span = document.createElement("span");
+  		  	time_span.className = "time-left";
+  		  	time_span.innerHTML = time;
+
+  		  	//appending all elements
+  		  	document.getElementById("rightcol").appendChild(sent_message_div);
+  		  	sent_message_div.appendChild(sent_message_p);
+  		  	sent_message_div.appendChild(time_span);
 		});
 
 		//to extract the 'chat_room_cookie' and stored values
@@ -89,6 +177,27 @@
 		function sendMessage() {
 			var message = document.getElementById('textMessage').value;
 			document.getElementById('textMessage').value="";
+
+			//create div to show message
+			var sent_message_div = document.createElement("div");
+			sent_message_div.className = "message sent";
+
+			//tag p to have message
+			var sent_message_p = document.createElement("p");
+			sent_message_p.innerHTML = message;
+
+			//current time
+			var today = new Date();
+			var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+			var time_span = document.createElement("span");
+			time_span.className = "time-right";
+			time_span.innerHTML = time;
+
+			//appending all elements
+			document.getElementById("rightcol").appendChild(sent_message_div);
+			sent_message_div.appendChild(sent_message_p);
+			sent_message_div.appendChild(time_span);
+
 			socket.emit("message", message);
 		}
 

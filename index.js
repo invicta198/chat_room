@@ -30,7 +30,11 @@ io.on('connection', (socket)=>{
 
     //socket listen to 'message'
     socket.on('message', (data) =>{
-        io.emit('message', '<strong>' + socket.username + '</strong>: ' + data);
+        const new_data = {
+            "data" : data,
+            "sender" : socket.username
+        };
+        io.emit('message',new_data);
     });
 
     //socket listen to 'username'
