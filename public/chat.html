@@ -73,6 +73,13 @@
 		#row-adjust{
 			margin-bottom: 50px;
 		}
+		#textMessage{
+			margin-right: 2px;
+		}
+		#reciever{
+			width : 50%;
+			margin-right: 5px;
+		}
 	</style>
 	<body>
 		<div class="container-fluid">
@@ -87,6 +94,7 @@
 			</div>
 			<div class="row">
 				<form id="chatForm" class="input-group-append" onsubmit="return false">
+					<input id="reciever" class="form-control" placeholder="Enter Sender's Username"/>
 					<input id="textMessage" class="form-control" placeholder="Type your message here..."/>
 					<button id="sendButton" onclick="sendMessage()" class="btn btn-outline-success">Send</button>
 				</form>
@@ -128,7 +136,8 @@
 		});
 
 		// on messge recieved
-		socket.on('message', function(new_data){
+		this.socket.on('message', function(new_data){
+			console.log("yes");
 			var sender = new_data["sender"];
 			if(sender == username)
 				return;
@@ -175,9 +184,17 @@
 
 		//emits 'message'
 		function sendMessage() {
-			var message = document.getElementById('textMessage').value;
-			document.getElementById('textMessage').value="";
 
+			var message = document.getElementById('textMessage').value;
+			var recipient = document.getElementById('reciever').value;
+
+			if(message=="" || recipient==""){
+				alert("Enter username and message");
+				return;
+			}
+			else{
+				document.getElementById('textMessage').value="";
+			}
 			//create div to show message
 			var sent_message_div = document.createElement("div");
 			sent_message_div.className = "message sent";
@@ -198,7 +215,11 @@
 			sent_message_div.appendChild(sent_message_p);
 			sent_message_div.appendChild(time_span);
 
-			socket.emit("message", message);
+			var data = {
+				"message":message,
+				"recipient":recipient
+			}
+			socket.emit("message", data);
 		}
 
 		//sends 'get' logout request

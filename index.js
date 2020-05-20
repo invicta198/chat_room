@@ -24,31 +24,39 @@ const serverHTTP = http.listen(3000, () => {
 
 //dictionary to store the socket.id : username
 var onlineSockets = {};
+//dictionary to store the username : socket.id
+var onlineSockets_reverse = {};
 
 io.on('connection', (socket)=>{
-    console.log('server connect');
-
-    //socket listen to 'message'
+    
     socket.on('message', (data) =>{
         const new_data = {
-            "data" : data,
+            "data" : data["message"],
+            "recipient" : data["recipient"],
             "sender" : socket.username
         };
-        io.emit('message',new_data);
+        //console.log("message");
+        io.to(onlineSockets_reverse[new_data["recipient"]]).emit('message',new_data);
     });
 
     //socket listen to 'username'
     socket.on('username', (data) =>{
         socket.username = data;
         onlineSockets[""+socket.id] = data;
-        console.log(socket.username," : ",socket.id);
+        onlineSockets_reverse[""+data] = ""+socket.id;
         io.emit('online socket', onlineSockets);
     });
 
     //on socket disconnect
     socket.on('disconnect', ()=>{
+        delete onlineSockets_reverse[onlineSockets[""+socket.id]];
         delete onlineSockets[""+socket.id];
-        console.log("disconnect : ",socket.id);
+        console.log('server disconnect');
+        console.log(onlineSockets);
+        console.log("#####");
+        console.log(onlineSockets_reverse);
+        console.log("*****************************");
+        //console.log("disconnect : ",socket.id);
         io.emit('online socket', onlineSockets);
     });
 
